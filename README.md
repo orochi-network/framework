@@ -1,2 +1,3 @@
-# framework
-TypeScript framework for general purpose
+# Framework
+
+A minimal TypeScript framework
