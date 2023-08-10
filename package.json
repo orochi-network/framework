@@ -1,7 +1,7 @@
 {
   "name": "@orochi-network/framework",
   "description": "A minimal TypeScript framework",
-  "version": "1.0.37",
+  "version": "1.0.38",
   "main": "./build/src/index.js",
   "types": "./build/src/index.d.ts",
   "files": [
@@ -45,8 +45,10 @@
     "chalk": "^4.1.2",
     "dotenv": "^10.0.0",
     "js-sha3": "^0.8.0",
+    "knex": "^2.5.1",
     "logform": "^2.3.0",
     "modern-syslog": "^1.2.0",
+    "mysql": "^2.18.1",
     "no-case": "^3.0.4",
     "winston": "^3.3.3",
     "winston-transport": "^4.4.0"
