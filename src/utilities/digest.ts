@@ -1,5 +1,5 @@
-import crypto from "crypto";
-import { keccak256 } from "js-sha3";
+import crypto from 'crypto';
+import { keccak256 } from 'js-sha3';
 
 export class Digest {
   public static buildDigest(): { s: Buffer; h: Buffer } {
