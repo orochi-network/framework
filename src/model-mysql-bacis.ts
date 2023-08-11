@@ -1,16 +1,16 @@
+/* eslint-disable class-methods-use-this */
 import { Knex } from 'knex';
 import { ModelMySQL } from './model-mysql';
 import Pagination from './pagination';
 import { IModelCondition, IPagination, IResponse } from './interfaces';
 
-export class ModelMysqlBasic<T> extends ModelMySQL {
-  protected basicQuery?(): Knex.QueryBuilder;
+export abstract class ModelMysqlBasic<T> extends ModelMySQL {
+  protected abstract basicQuery(): Knex.QueryBuilder;
 
   constructor(tableName: string, dbInstanceName: string = '__default__') {
     super(tableName, dbInstanceName);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   protected attachConditions(
     ik: Knex.QueryBuilder,
     conditions?: IModelCondition<T>[]
@@ -22,14 +22,33 @@ export class ModelMysqlBasic<T> extends ModelMySQL {
     ) {
       for (let i = 0; i < conditions.length; i += 1) {
         const { field, operator, value } = conditions[i];
-        if (operator) {
-          ik.where(field as string, operator, value);
-        } else {
-          ik.where(field as string, value);
+        switch (operator) {
+          case '<=':
+          case '>=':
+          case '<':
+          case '>':
+            ik.where(field as string, operator, value);
+            break;
+          case '!=':
+            ik.whereNot(field as string, value);
+            break;
+          default:
+            ik.where(field as string, value);
+            break;
         }
       }
     }
     return ik;
+  }
+
+  protected async getListByCondition<V>(
+    query: Knex.QueryBuilder,
+    pagination: IPagination = { offset: 0, limit: 20, order: [] }
+  ): Promise<IResponse<V>> {
+    return {
+      success: true,
+      result: await Pagination.pagination<V>(query, pagination),
+    };
   }
 
   public async create(data: Partial<T>): Promise<T | undefined> {
@@ -48,9 +67,6 @@ export class ModelMysqlBasic<T> extends ModelMySQL {
     data: Partial<T>,
     conditions?: IModelCondition<T>[]
   ) {
-    if (typeof this.basicQuery === 'undefined') {
-      throw Error('Basic query was undefined');
-    }
     const [record] = await this.attachConditions(
       this.basicQuery(),
       conditions
@@ -69,29 +85,21 @@ export class ModelMysqlBasic<T> extends ModelMySQL {
     return this.attachConditions(this.basicQuery(), conditions);
   }
 
-  public async isExist(key: keyof T, value: any): Promise<boolean> {
+  public async isExist<K extends keyof T, V = T[K]>(
+    key: keyof T,
+    value: V
+  ): Promise<boolean> {
     const [result] = await this.getDefaultKnex()
       .count('*', { as: 'total' })
-      .where(key, value);
-    return result && result.total > 0;
+      .where(key, value as any);
+    return typeof result !== 'undefined' && result.total > 0;
   }
 
-  public async isNotExist(key: keyof T, value: any): Promise<boolean> {
+  public async isNotExist<K extends keyof T, V = T[K]>(
+    key: keyof T,
+    value: V
+  ): Promise<boolean> {
     return !(await this.isExist(key, value));
-  }
-
-  /**
-   * Get list of records by simple conditions
-   */
-  // eslint-disable-next-line class-methods-use-this
-  protected async getListByCondition<V>(
-    query: Knex.QueryBuilder,
-    pagination: IPagination = { offset: 0, limit: 20, order: [] }
-  ): Promise<IResponse<V>> {
-    return {
-      success: true,
-      result: await Pagination.pagination<V>(query, pagination),
-    };
   }
 }
 

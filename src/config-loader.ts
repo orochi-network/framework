@@ -1,12 +1,12 @@
-import fs from 'fs';
-import { parse } from 'dotenv';
-import { Validator } from './validator';
-import { Obj } from './utilities';
+import fs from "fs";
+import Joi from "joi";
+import { parse } from "dotenv";
+import { Obj } from "./utilities";
 
 export class ConfigLoader {
   private envs: any;
 
-  constructor(filepath: string, validators?: Validator) {
+  constructor(filepath: string, validators?: Joi.ObjectSchema) {
     if (fs.existsSync(filepath)) {
       // If file is exist load from file
       this.envs = Obj.objToCamelCase(parse(fs.readFileSync(filepath)));
@@ -14,8 +14,13 @@ export class ConfigLoader {
       // Otherwise load from process.env
       this.envs = Obj.objToCamelCase(process.env);
     }
-    if (typeof validators !== 'undefined') {
+    if (typeof validators !== "undefined") {
       this.envs = validators.validate(this.envs);
+      const result = validators.validate(this.envs);
+      if (result.error) {
+        throw new Error(result.error.message);
+      }
+      this.envs = result.value;
     }
   }
 

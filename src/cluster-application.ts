@@ -1,115 +1,132 @@
-/* eslint-disable import/no-dynamic-require */
-/* eslint-disable global-require */
-import cluster, { Worker } from 'cluster';
-import EventEmitter from 'events';
+import cluster, { Worker } from 'cluster'
+import EventEmitter from 'events'
 
 export interface IApplicationPayload {
-  name: string;
-  payload: string;
-  [key: string]: string;
+  name: string
+  payload: string
+  [key: string]: string
 }
 
 export class ClusterApplication extends EventEmitter {
-  private workerStorage: Map<string, IApplicationPayload> = new Map();
+  private workerStorage: Map<string, IApplicationPayload> = new Map()
 
-  private workerMap: Map<number, IApplicationPayload> = new Map();
+  private workerMap: Map<number, IApplicationPayload> = new Map()
 
-  private shutdown: boolean = false;
+  private shutdown: boolean = false
 
-  private autoRestart: boolean = true;
+  private autoRestart: boolean = true
 
   constructor(restartPolicy: boolean = true) {
-    super();
-    this.autoRestart = restartPolicy;
+    super()
+    this.autoRestart = restartPolicy
   }
 
   public add(environment: IApplicationPayload): ClusterApplication {
-    if (cluster.isMaster) {
-      this.emit('new', environment);
+    if (cluster.isPrimary) {
+      this.emit('new', environment)
     }
 
-    this.workerStorage.set(environment.name, environment);
-    return this;
+    this.workerStorage.set(environment.name, environment)
+    return this
   }
 
   private restartWorker(pid: number, e?: IApplicationPayload) {
     if (pid < 0 && typeof e !== 'undefined') {
-      const curWorker = cluster.fork(e);
+      const curWorker = cluster.fork(e)
       if (typeof curWorker.process.pid !== 'undefined') {
-        this.workerMap.set(curWorker.process.pid, e);
+        this.workerMap.set(curWorker.process.pid, e)
       } else {
-        this.emit('error', new Error('ClusterApplication::restartWorker() invalid process id'));
+        this.emit(
+          'error',
+          new Error('ClusterApplication::restartWorker() invalid process id')
+        )
       }
-      return;
+      return
     }
     if (this.workerMap.has(pid)) {
-      const environment = this.workerMap.get(pid);
+      const environment = this.workerMap.get(pid)
       if (environment) {
-        const curWorker = cluster.fork(environment);
+        const curWorker = cluster.fork(environment)
         if (typeof curWorker.process.pid !== 'undefined') {
-          this.workerMap.set(curWorker.process.pid, environment);
-          this.emit('restart', curWorker.process.pid, environment);
-          this.workerMap.delete(pid);
+          this.workerMap.set(curWorker.process.pid, environment)
+          this.emit('restart', curWorker.process.pid, environment)
+          this.workerMap.delete(pid)
         } else {
-          this.emit('error', new Error('ClusterApplication::restartWorker() invalid process id'));
+          this.emit(
+            'error',
+            new Error('ClusterApplication::restartWorker() invalid process id')
+          )
         }
-        return;
+        return
       }
     }
-    this.emit('error', new Error('Pid or payload is invalid'));
+    this.emit('error', new Error('Pid or payload is invalid'))
   }
 
   private startWorkers() {
     this.workerStorage.forEach((e: IApplicationPayload) => {
-      this.restartWorker(-1, e);
-    });
+      this.restartWorker(-1, e)
+    })
   }
 
   public start() {
-    if (cluster.isMaster) {
-      this.startWorkers();
+    if (cluster.isPrimary) {
+      this.startWorkers()
 
       cluster.on('exit', (worker: Worker) => {
         if (!this.shutdown && this.autoRestart) {
           if (typeof worker.process.pid !== 'undefined') {
-            this.restartWorker(worker.process.pid);
+            this.restartWorker(worker.process.pid)
           } else {
-            this.emit('error', new Error('ClusterApplication::start() invalid process id'));
+            this.emit(
+              'error',
+              new Error('ClusterApplication::start() invalid process id')
+            )
           }
         }
-      });
+      })
 
       const handler = (signal: string) => {
-        this.emit('exit', signal);
-        this.shutdown = true;
-        const workerList = Object.values(cluster.workers);
-        for (let i = 0; i < workerList.length; i += 1) {
-          const worker = workerList[i];
-          if (typeof worker !== 'undefined') {
-            worker.kill(signal);
+        this.emit('exit', signal)
+        this.shutdown = true
+        let workerList: Worker[] = []
+        if (
+          typeof cluster !== 'undefined' &&
+          typeof cluster.workers !== 'undefined'
+        ) {
+          workerList = <Worker[]>(
+            Object.values(cluster.workers).filter(
+              (e) => typeof e !== 'undefined'
+            )
+          )
+          for (let i = 0; i < workerList.length; i += 1) {
+            const worker = workerList[i]
+            if (typeof worker !== 'undefined') {
+              worker.kill(signal)
+            }
           }
         }
         setInterval(() => {
-          let isAllDead = true;
+          let isAllDead = true
           for (let i = 0; i < workerList.length; i += 1) {
-            const worker = workerList[i];
+            const worker = workerList[i]
             if (typeof worker !== 'undefined') {
-              isAllDead &&= worker.isDead();
+              isAllDead &&= worker.isDead()
             }
           }
           if (isAllDead) {
-            process.exit(0);
+            process.exit(0)
           }
-        }, 1000);
-      };
+        }, 1000)
+      }
 
-      process.on('SIGTERM', handler);
-      process.on('SIGINT', handler);
+      process.on('SIGTERM', handler)
+      process.on('SIGINT', handler)
     } else {
-      const { payload } = process.env;
-      require(payload || '');
+      const { payload } = process.env
+      import(payload || '')
     }
   }
 }
 
-export default ClusterApplication;
+export default ClusterApplication

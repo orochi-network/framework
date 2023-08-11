@@ -1,10 +1,7 @@
 import util from "util";
 import winston, { transports, format, Logger } from "winston";
-// @ts-ignore
-// import syslog from 'modern-syslog';
 import chalk from "chalk";
 import { TransformableInfo } from "logform";
-// import SyslogTransport from './transport';
 
 type LogLevelType =
   | "emerg"
@@ -111,13 +108,12 @@ export class LoggerLoader {
     level: LogLevelType,
     outputFormat: "json" | "string" = "json"
   ) {
-    // syslog.init(service);
     this.core = winston.createLogger({
       level,
       levels: winston.config.syslog.levels,
       format: outputFormat === "json" ? outputJson : outputString,
       defaultMeta: { service },
-      transports: [new transports.Console()], // removed: new SyslogTransport({ syslog })
+      transports: [new transports.Console()],
     });
     this.level = LogLevel[level];
     this.debug("Start new winston instance", "service");

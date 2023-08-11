@@ -1,6 +1,6 @@
 export interface IModelCondition<T> {
   field: keyof T;
-  operator?: '>' | '<' | '<=' | '>=';
+  operator?: '>' | '<' | '<=' | '>=' | '=' | '!=';
   value: string | number | boolean;
 }
 
