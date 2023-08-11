@@ -139,6 +139,10 @@ export class LoggerLoader {
     if (this.level >= LogLevel.error) this.core.error(internalLog(params));
   }
 
+  public warn(...params: any[]): void {
+    if (this.level >= LogLevel.warning) this.core.warning(internalLog(params));
+  }
+
   public warning(...params: any[]): void {
     if (this.level >= LogLevel.warning) this.core.warning(internalLog(params));
   }
