@@ -1,7 +1,7 @@
 {
   "name": "@orochi-network/framework",
   "description": "A minimal TypeScript framework",
-  "version": "1.1.0",
+  "version": "1.1.6",
   "main": "build/src/index.js",
   "types": "./build/src/index.d.ts",
   "files": [

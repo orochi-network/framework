@@ -1,17 +1,17 @@
-import util from "util";
-import winston, { transports, format, Logger } from "winston";
-import chalk from "chalk";
-import { TransformableInfo } from "logform";
+import util from 'util';
+import winston, { transports, format, Logger } from 'winston';
+import chalk from 'chalk';
+import { TransformableInfo } from 'logform';
 
 type LogLevelType =
-  | "emerg"
-  | "alert"
-  | "crit"
-  | "error"
-  | "warning"
-  | "notice"
-  | "info"
-  | "debug";
+  | 'emerg'
+  | 'alert'
+  | 'crit'
+  | 'error'
+  | 'warning'
+  | 'notice'
+  | 'info'
+  | 'debug';
 
 enum LogLevel {
   emerg = 0,
@@ -25,23 +25,23 @@ enum LogLevel {
 }
 
 export function colorByLevel(level: string, text: string): string {
-  const tmp = ` ${text.toUpperCase()}${" ".repeat(8 - text.length)}`;
+  const tmp = ` ${text.toUpperCase()}${' '.repeat(8 - text.length)}`;
   switch (level) {
-    case "emerg":
+    case 'emerg':
       return chalk.black.bgGray(tmp);
-    case "alert":
+    case 'alert':
       return chalk.black.bgMagenta(tmp);
-    case "crit":
+    case 'crit':
       return chalk.black.bgMagentaBright(tmp);
-    case "error":
+    case 'error':
       return chalk.black.bgRed(tmp);
-    case "warning":
+    case 'warning':
       return chalk.black.bgYellow(tmp);
-    case "notice":
+    case 'notice':
       return chalk.black.bgCyan(tmp);
-    case "info":
+    case 'info':
       return chalk.black.bgGreen(tmp);
-    case "debug":
+    case 'debug':
       return chalk.black.bgBlue(tmp);
     default:
       return chalk.black.bgWhite(tmp);
@@ -50,21 +50,21 @@ export function colorByLevel(level: string, text: string): string {
 
 export function colorMessageByLevel(level: string, text: string): string {
   switch (level) {
-    case "emerg":
+    case 'emerg':
       return chalk.gray(text);
-    case "alert":
+    case 'alert':
       return chalk.magenta(text);
-    case "crit":
+    case 'crit':
       return chalk.magentaBright(text);
-    case "error":
+    case 'error':
       return chalk.red(text);
-    case "warning":
+    case 'warning':
       return chalk.yellow(text);
-    case "notice":
+    case 'notice':
       return chalk.cyan(text);
-    case "info":
+    case 'info':
       return chalk.green(text);
-    case "debug":
+    case 'debug':
       return chalk.blue(text);
     default:
       return chalk.white(text);
@@ -74,13 +74,13 @@ export function colorMessageByLevel(level: string, text: string): string {
 function internalLog(params: any[]) {
   const tempStack = [];
   for (let i = 0; i < params.length; i += 1) {
-    if (typeof params[i] === "string") {
+    if (typeof params[i] === 'string') {
       tempStack.push(params[i]);
     } else {
       tempStack.push(util.inspect(params[i], { depth: null }));
     }
   }
-  return tempStack.join(" ");
+  return tempStack.join(' ');
 }
 
 const { timestamp, combine, printf, json } = format;
@@ -106,17 +106,17 @@ export class LoggerLoader {
   constructor(
     service: string,
     level: LogLevelType,
-    outputFormat: "json" | "string" = "json"
+    outputFormat: 'json' | 'string' = 'json'
   ) {
     this.core = winston.createLogger({
       level,
       levels: winston.config.syslog.levels,
-      format: outputFormat === "json" ? outputJson : outputString,
+      format: outputFormat === 'json' ? outputJson : outputString,
       defaultMeta: { service },
       transports: [new transports.Console()],
     });
     this.level = LogLevel[level];
-    this.debug("Start new winston instance", "service");
+    this.debug('Start new winston instance', 'service');
   }
 
   public emerg(...params: any[]): void {
