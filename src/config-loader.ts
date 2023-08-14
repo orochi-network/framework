@@ -1,7 +1,7 @@
-import fs from "fs";
-import Joi from "joi";
-import { parse } from "dotenv";
-import { Obj } from "./utilities";
+import fs from 'fs';
+import Joi from 'joi';
+import { parse } from 'dotenv';
+import { Obj } from './utilities';
 
 export class ConfigLoader {
   private envs: any;
@@ -14,8 +14,7 @@ export class ConfigLoader {
       // Otherwise load from process.env
       this.envs = Obj.objToCamelCase(process.env);
     }
-    if (typeof validators !== "undefined") {
-      this.envs = validators.validate(this.envs);
+    if (typeof validators !== 'undefined') {
       const result = validators.validate(this.envs);
       if (result.error) {
         throw new Error(result.error.message);
