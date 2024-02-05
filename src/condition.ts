@@ -1,12 +1,7 @@
-export interface IModelCondition<T> {
-  field: keyof T;
-  operator?: '>' | '<' | '<=' | '>=' | '=' | '!=';
-  value: string | number | boolean;
-}
+import { IModelCondition } from './interfaces/model';
 
 export class ConditionBuilder<T> {
   private cache: IModelCondition<T>[] = [];
-
   private currentField: keyof T = '' as keyof T;
 
   public static getInstance<T>() {
@@ -54,9 +49,4 @@ export class ConditionBuilder<T> {
   public lte(value: string | number | boolean) {
     return this.newCondition(this.currentField, '<=', value);
   }
-}
-
-export enum EModelLock {
-  write = 'WRITE',
-  read = 'READ',
 }

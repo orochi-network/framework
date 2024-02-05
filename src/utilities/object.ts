@@ -1,35 +1,16 @@
-import { noCase } from 'no-case';
+import * as changeCase from 'change-case';
 
 export class Obj {
   public static toCamelCase(text: string): string {
-    return noCase(text, {
-      delimiter: '',
-      transform: (part: string, index: number) => {
-        const lowerCasePart = part.toLowerCase();
-        return index === 0
-          ? lowerCasePart
-          : `${lowerCasePart[0].toLocaleUpperCase()}${lowerCasePart.substr(1)}`;
-      },
-    });
+    return changeCase.camelCase(text);
   }
 
   public static toSnakeCase(text: string): string {
-    return noCase(text, {
-      delimiter: '_',
-      transform: (part: string) => part.toLowerCase(),
-    });
+    return changeCase.snakeCase(text);
   }
 
   public static toPascalCase(text: string): string {
-    return noCase(text, {
-      delimiter: '',
-      transform: (part: string) => {
-        const lowerCasePart = part.toLowerCase();
-        return `${lowerCasePart[0].toLocaleUpperCase()}${lowerCasePart.substr(
-          1
-        )}`;
-      },
-    });
+    return changeCase.pascalCase(text);
   }
 
   public static objToCamelCase(obj: any): any {
