@@ -1,8 +1,8 @@
 /* eslint-disable class-methods-use-this */
 import { Knex } from 'knex';
-import { ModelPg } from './model-pg';
-import Pagination from './pagination';
-import { IModelCondition, IPagination, IResponse } from './interfaces';
+import { ModelPg } from './model-pg.js';
+import Pagination from './pagination.js';
+import { IModelCondition, IPagination, IResponse } from './interfaces/index.js';
 
 export abstract class ModelPgBasic<T> extends ModelPg {
   protected abstract basicQuery(): Knex.QueryBuilder;

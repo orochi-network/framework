@@ -1,4 +1,4 @@
-import { IModelCondition } from './interfaces/model';
+import { IModelCondition } from './interfaces/model.js';
 
 export class ConditionBuilder<T> {
   private cache: IModelCondition<T>[] = [];

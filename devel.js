@@ -1,4 +1,4 @@
-const fs = require('fs');
+import  fs from 'fs'
 
 function readJson(filename) {
   return JSON.parse(fs.readFileSync(filename).toString());

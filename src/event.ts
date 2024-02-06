@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import Singleton from './singleton';
+import Singleton from './singleton.js';
 
 export const FrameworkEvent = Singleton('fw-event', EventEmitter);
 

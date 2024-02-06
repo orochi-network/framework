@@ -1,21 +1,21 @@
 import joi from 'joi';
 import knex from 'knex';
 
-export * from './event';
-export * from './singleton';
-export * from './logger/index';
-export * from './logger/transport';
-export * from './cluster-application';
-export * from './config-loader';
-export * from './connector';
-export * from './pagination';
-export * from './interfaces';
-export * from './model-mysql';
-export * from './model-mysql-bacis';
-export * from './model-pg';
-export * from './model-pg-basic';
-export * from './transaction';
-export * as Utilities from './utilities';
+export * from './event.js';
+export * from './singleton.js';
+export * from './logger/index.js';
+export * from './logger/transport.js';
+export * from './cluster-application.js';
+export * from './config-loader.js';
+export * from './connector.js';
+export * from './pagination.js';
+export * from './interfaces/index.js';
+export * from './model-mysql.js';
+export * from './model-mysql-bacis.js';
+export * from './model-pg.js';
+export * from './model-pg-basic.js';
+export * from './transaction.js';
+export * as Utilities from './utilities/index.js';
 
 export const Joi = joi;
 export const Knex = knex;

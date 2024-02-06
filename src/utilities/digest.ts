@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { keccak256 } from 'js-sha3';
+import jsSha3 from 'js-sha3';
 
 export class Digest {
   public static buildDigest(): { s: Buffer; h: Buffer } {
@@ -8,7 +8,7 @@ export class Digest {
     buf.writeBigInt64BE(BigInt(Date.now()), 24);
     return {
       s: buf,
-      h: Buffer.from(keccak256.create().update(buf).digest()),
+      h: Buffer.from(jsSha3.keccak_256.create().update(buf).digest()),
     };
   }
 
@@ -21,7 +21,7 @@ export class Digest {
       buf.writeBigInt64BE(BigInt(Date.now()), j + 24);
       const t = Buffer.alloc(32);
       buf.copy(t, 0, j, j + 32);
-      const d = Buffer.from(keccak256.create().update(t).digest());
+      const d = Buffer.from(jsSha3.keccak_256.create().update(t).digest());
       s.push(t);
       h.push(d);
       d.copy(buf, j);

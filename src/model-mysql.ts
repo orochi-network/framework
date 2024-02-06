@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { Knex } from 'knex';
-import { Connector } from './connector';
-import { EModelLock } from './interfaces';
+import { Connector } from './connector.js';
+import { EModelLock } from './interfaces/index.js';
 
 export type TMysqlModelEvent = 'table-lock' | 'table-unlock';
 
