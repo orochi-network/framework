@@ -1,8 +1,11 @@
 import fs from 'fs';
-import path from 'path';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const DIRNAME = dirname(fileURLToPath(import.meta.url));
 
 export class File {
-  public static getRootFolder(startSearch: string = __dirname): string {
+  public static getRootFolder(startSearch: string = DIRNAME): string {
     const parts = startSearch.split(path.sep);
     const candidate = [];
     for (let i = parts.length; i > 1; i -= 1) {

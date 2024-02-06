@@ -1,12 +1,16 @@
 import { EventEmitter } from 'events';
-import Singleton from './singleton.js';
 
-export const FrameworkEvent = Singleton('fw-event', EventEmitter);
+export class FrameworkEventEmitter extends EventEmitter {
+  private static instance: FrameworkEventEmitter | undefined;
 
-if (FrameworkEvent.listenerCount('error') === 0) {
-  FrameworkEvent.on('error', (e: Error) => {
-    process.stdout.write(`Unknown error occurred: ${e.message}\n`);
-  });
+  public static getInstance() {
+    if (typeof FrameworkEventEmitter.instance === 'undefined') {
+      FrameworkEventEmitter.instance = new FrameworkEventEmitter();
+    }
+    return FrameworkEventEmitter.instance;
+  }
 }
+
+export const FrameworkEvent = FrameworkEventEmitter.getInstance();
 
 export default FrameworkEvent;

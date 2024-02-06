@@ -2,7 +2,6 @@ import joi from 'joi';
 import knex from 'knex';
 
 export * from './event.js';
-export * from './singleton.js';
 export * from './logger/index.js';
 export * from './logger/transport.js';
 export * from './cluster-application.js';
