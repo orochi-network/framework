@@ -1,7 +1,7 @@
 import fs from 'fs';
 import Joi from 'joi';
 import { parse } from 'dotenv';
-import { Obj } from './utilities/index.js';
+import { Obj } from '../utilities/index.js';
 
 export class ConfigLoader {
   private envs: any;

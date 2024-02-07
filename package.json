@@ -1,13 +1,10 @@
 {
   "name": "@orochi-network/framework",
   "description": "A minimal TypeScript framework",
-  "version": "1.2.7",
+  "version": "1.2.9",
   "main": "build/src/index.js",
   "types": "./build/src/index.d.ts",
   "type": "module",
-  "files": [
-    "build"
-  ],
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
     "build": "rm -rf ./build && tsc",
@@ -28,6 +25,36 @@
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/orochi-network/framework/issues"
+  },
+  "files": [
+    "build/src",
+    "!**/*.tsbuildinfo"
+  ],
+  "exports": {
+    ".": {
+      "types": "./build/src/index.d.ts",
+      "import": "./build/src/index.js"
+    },
+    "./application": {
+      "types": "./build/src/application/index.d.ts",
+      "import": "./build/src/application/index.js"
+    },
+    "./interfaces": {
+      "types": "./build/src/interfaces/common.d.ts",
+      "import": "./build/src/interfaces/common.js"
+    },
+    "./logger": {
+      "types": "./build/src/logger/index.d.ts",
+      "import": "./build/src/logger/index.js"
+    },
+    "./model": {
+      "types": "./build/src/model/index.d.ts",
+      "import": "./build/src/model/index.js"
+    },
+    "./utilities": {
+      "types": "./build/src/utilities/index.d.ts",
+      "import": "./build/src/utilities/index.js"
+    }
   },
   "homepage": "https://github.com/orochi-network/framework#readme",
   "devDependencies": {

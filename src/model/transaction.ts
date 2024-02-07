@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import { Knex } from 'knex';
-import { Connector } from './connector.js';
+import { Connector } from '../application/connector.js';
 
 export type TTransactionCallback = (tx: Knex.Transaction) => Promise<void>;
 

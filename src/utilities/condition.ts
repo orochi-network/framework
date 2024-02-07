@@ -1,7 +1,8 @@
-import { IModelCondition } from './interfaces/model.js';
+import { IModelCondition } from '../interfaces/common.js';
 
 export class ConditionBuilder<T> {
   private cache: IModelCondition<T>[] = [];
+
   private currentField: keyof T = '' as keyof T;
 
   public static getInstance<T>() {
@@ -50,3 +51,5 @@ export class ConditionBuilder<T> {
     return this.newCondition(this.currentField, '<=', value);
   }
 }
+
+export default ConditionBuilder;

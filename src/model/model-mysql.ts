@@ -1,11 +1,11 @@
 import { EventEmitter } from 'events';
 import { Knex } from 'knex';
-import { Connector } from './connector.js';
-import { EModelLock } from './interfaces/index.js';
+import { Connector } from '../application/connector.js';
+import { EModelLock } from '../interfaces/common.js';
 
-export type TPgModelEvent = 'table-lock' | 'table-unlock';
+export type TMysqlModelEvent = 'table-lock' | 'table-unlock';
 
-export class ModelPg extends EventEmitter {
+export class ModelMySQL extends EventEmitter {
   public tableName: string;
 
   private knexInstance: Knex;
@@ -31,6 +31,20 @@ export class ModelPg extends EventEmitter {
   public getDefaultKnex(): Knex.QueryBuilder {
     return this.knexInstance(this.tableName);
   }
+
+  public async lock(mode: EModelLock = EModelLock.write) {
+    const result = await this.getKnex().raw(
+      `LOCK TABLES ${this.tableName} ${mode}`
+    );
+    this.emit('table-lock', this.tableName, mode);
+    return result;
+  }
+
+  public async unlock() {
+    const result = await this.getKnex().raw('UNLOCK TABLES');
+    this.emit('table-unlock', this.tableName);
+    return result;
+  }
 }
 
-export default ModelPg;
+export default ModelMySQL;

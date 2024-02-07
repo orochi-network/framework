@@ -1,5 +1,5 @@
 import { Knex } from 'knex';
-import { IPagination, IRecordList } from './interfaces/index.js';
+import { IPagination, IRecordList } from '../interfaces/common.js';
 
 export class Pagination {
   public static async countTotal(

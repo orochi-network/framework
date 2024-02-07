@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 
 export class FrameworkEventEmitter extends EventEmitter {
-  private static instance: FrameworkEventEmitter | undefined;
+  private static instance: EventEmitter | undefined;
 
   public static getInstance() {
     if (typeof FrameworkEventEmitter.instance === 'undefined') {

@@ -2,7 +2,11 @@
 import { Knex } from 'knex';
 import { ModelMySQL } from './model-mysql.js';
 import Pagination from './pagination.js';
-import { IModelCondition, IPagination, IResponse } from './interfaces/index.js';
+import {
+  IModelCondition,
+  IPagination,
+  IResponse,
+} from '../interfaces/common.js';
 
 export abstract class ModelMysqlBasic<T> extends ModelMySQL {
   protected abstract basicQuery(): Knex.QueryBuilder;
