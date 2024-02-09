@@ -55,27 +55,32 @@ export abstract class ModelPgBasic<T> extends ModelPg {
     };
   }
 
-  public async create(data: Partial<T>): Promise<T[] | undefined> {
+  public async insert(data: Partial<T>[]): Promise<T[]> {
     return this.getDefaultKnex().insert(data).returning('*');
   }
 
-  public async update(data: Partial<T>, conditions?: IModelCondition<T>[]) {
-    await this.attachConditions(this.getDefaultKnex().update(data), conditions);
+  public async update(
+    data: Partial<T>,
+    conditions?: IModelCondition<T>[]
+  ): Promise<T[]> {
+    return this.attachConditions(
+      this.getDefaultKnex().update(data),
+      conditions
+    ).returning('*');
   }
 
   public async forceUpdate(
     data: Partial<T>,
     conditions?: IModelCondition<T>[]
-  ) {
+  ): Promise<T[]> {
     const [record] = await this.attachConditions(
       this.basicQuery(),
       conditions
-    ).limit(1);
+    ).first();
     if (typeof record === 'undefined' || typeof conditions === 'undefined') {
-      await this.create(data);
-    } else {
-      await this.update(data, conditions);
+      return this.insert([data]);
     }
+    return this.update(data, conditions);
   }
 
   public async get(conditions?: IModelCondition<T>[]): Promise<T[]> {
