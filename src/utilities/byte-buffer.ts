@@ -18,9 +18,14 @@ export class BytesBuffer {
     return this;
   }
 
-  public writeUint(uint: string, bitLen: number = 256): BytesBuffer {
+  public writeUint(
+    uint: string | bigint | number,
+    bitLen: number = 256
+  ): BytesBuffer {
     this.tmpBuf += StringExt.uintPadding(
-      StringExt.hexPrefixRemove(uint),
+      typeof uint === 'string'
+        ? StringExt.hexPrefixRemove(uint)
+        : uint.toString(16),
       bitLen
     );
     return this;
