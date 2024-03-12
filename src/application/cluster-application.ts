@@ -2,21 +2,21 @@ import cluster, { Worker } from 'cluster';
 import EventEmitter from 'events';
 
 // Application type, payload is a function that returns a Promise<number>
-export type Application = { payload: () => Promise<number> };
+export type TApplication = { payload: () => Promise<number> };
 
 // ApplicationMetadata type, clusterName is a string
-export type ApplicationMetadata = { clusterName: string };
+export type TApplicationMetadata = { clusterName: string };
 
 /**
  * ApplicationPayload type
  * This type is a combination of Application and ApplicationMetadata
  */
-export type ApplicationPayload = Application & ApplicationMetadata;
+export type TApplicationPayload = TApplication & TApplicationMetadata;
 
 // ClusterApplication class
 // This class is used to manage the cluster workers and their payloads
 export class ClusterApplication extends EventEmitter {
-  private workerMap: Map<string, ApplicationPayload> = new Map();
+  private workerMap: Map<string, TApplicationPayload> = new Map();
 
   private pidMap: Map<number, string> = new Map();
 
@@ -29,7 +29,7 @@ export class ClusterApplication extends EventEmitter {
     this.autoRestart = restartPolicy;
   }
 
-  public add(app: ApplicationPayload): ClusterApplication {
+  public add(app: TApplicationPayload): ClusterApplication {
     if (cluster.isPrimary) {
       this.emit('new', app.clusterName);
     }
@@ -38,7 +38,7 @@ export class ClusterApplication extends EventEmitter {
     return this;
   }
 
-  private restartWorker(pid: number, app?: ApplicationPayload) {
+  private restartWorker(pid: number, app?: TApplicationPayload) {
     if (pid < 0 && typeof app !== 'undefined') {
       const curWorker = cluster.fork({ clusterName: app.clusterName });
       if (typeof curWorker.process.pid !== 'undefined') {
