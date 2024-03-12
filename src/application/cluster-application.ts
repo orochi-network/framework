@@ -70,9 +70,9 @@ export class ClusterApplication extends EventEmitter {
   }
 
   private startWorkers() {
-    for (let appPayload of this.workerMap.values()) {
+    Array.from(this.workerMap.values()).forEach((appPayload) => {
       this.restartWorker(-1, appPayload);
-    }
+    });
   }
 
   public start() {
