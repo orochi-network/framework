@@ -7,9 +7,14 @@ import {
   IPagination,
   IResponse,
 } from '../interfaces/common.js';
+import ConditionBuilder from '../utilities/condition.js';
 
 export abstract class ModelPgBasic<T> extends ModelPg {
   protected abstract basicQuery(): Knex.QueryBuilder;
+
+  get condition() {
+    return ConditionBuilder.getInstance<T>();
+  }
 
   constructor(tableName: string, dbInstanceName: string = '__default__') {
     super(tableName, dbInstanceName);
@@ -83,7 +88,7 @@ export abstract class ModelPgBasic<T> extends ModelPg {
     return this.update(data, conditions);
   }
 
-  public async get(conditions?: IModelCondition<T>[]): Promise<T[]> {
+  public async find(conditions?: IModelCondition<T>[]): Promise<T[]> {
     if (typeof this.basicQuery === 'undefined') {
       throw Error('Basic query was undefined');
     }
