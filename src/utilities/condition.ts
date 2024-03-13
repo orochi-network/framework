@@ -50,6 +50,15 @@ export class ConditionBuilder<T> {
   public lte(value: string | number | boolean) {
     return this.newCondition(this.currentField, '<=', value);
   }
+
+  public invoke() {
+    return this.cache;
+  }
+
+  public flush() {
+    this.cache = [];
+    return this;
+  }
 }
 
 export default ConditionBuilder;
