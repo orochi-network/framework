@@ -1,7 +1,7 @@
 import joi from 'joi';
-import knex from 'knex';
 
-export * from './interfaces/common.js';
+export * as ChangeCase from 'change-case';
+export * as Common from './interfaces/common.js';
+export * as jsSha3 from 'js-sha3';
 
 export const Joi = joi;
-export const Knex = knex;
