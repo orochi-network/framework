@@ -120,15 +120,17 @@ export class LoggerLoader {
   }
 
   public emerg(...params: any[]): void {
-    if (this.level >= LogLevel.emerg) this.core.emerg(internalLog(params));
+    if (this.level >= LogLevel.emerg)
+      this.core.log('emerg', internalLog(params));
   }
 
   public alert(...params: any[]): void {
-    if (this.level >= LogLevel.alert) this.core.alert(internalLog(params));
+    if (this.level >= LogLevel.alert)
+      this.core.log('alert', internalLog(params));
   }
 
   public crit(...params: any[]): void {
-    if (this.level >= LogLevel.crit) this.core.crit(internalLog(params));
+    if (this.level >= LogLevel.crit) this.core.log('crit', internalLog(params));
   }
 
   public error(...params: any[]): void {
@@ -136,15 +138,16 @@ export class LoggerLoader {
   }
 
   public warn(...params: any[]): void {
-    if (this.level >= LogLevel.warning) this.core.warning(internalLog(params));
+    if (this.level >= LogLevel.warning) this.core.warn(internalLog(params));
   }
 
   public warning(...params: any[]): void {
-    if (this.level >= LogLevel.warning) this.core.warning(internalLog(params));
+    if (this.level >= LogLevel.warning) this.core.warn(internalLog(params));
   }
 
   public notice(...params: any[]): void {
-    if (this.level >= LogLevel.notice) this.core.notice(internalLog(params));
+    if (this.level >= LogLevel.notice)
+      this.core.log('notice', internalLog(params));
   }
 
   public info(...params: any[]): void {
