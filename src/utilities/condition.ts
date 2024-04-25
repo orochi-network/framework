@@ -52,12 +52,9 @@ export class ConditionBuilder<T> {
   }
 
   public invoke() {
-    return this.cache;
-  }
-
-  public flush() {
+    const temp = [...this.cache];
     this.cache = [];
-    return this;
+    return temp;
   }
 }
 
