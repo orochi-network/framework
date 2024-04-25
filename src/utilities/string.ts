@@ -54,7 +54,7 @@ export class StringExt {
     return /^0x([0-9A-Fa-f]{2})+$/.test(input);
   }
 
-  public static isUnprefixedHexString(input: string): boolean {
+  public static isUnPrefixedHexString(input: string): boolean {
     return /^([0-9A-Fa-f]{2})+$/.test(input);
   }
 

@@ -6,7 +6,20 @@ export class BytesBuffer {
    */
   private tmpBuf: string = '';
 
+  /**
+   * Get instance of BytesBuffer
+   * @deprecated Please use getInstance instead
+   * @returns
+   */
   public static newInstance(): BytesBuffer {
+    return new BytesBuffer();
+  }
+
+  /**
+   * Get instance of BytesBuffer
+   * @returns
+   */
+  public static getInstance(): BytesBuffer {
     return new BytesBuffer();
   }
 
@@ -20,7 +33,7 @@ export class BytesBuffer {
 
   public writeUint(
     uint: string | bigint | number,
-    bitLen: number = 256
+    bitLen: number
   ): BytesBuffer {
     this.tmpBuf += StringExt.uintPadding(
       typeof uint === 'string'
@@ -31,7 +44,12 @@ export class BytesBuffer {
     return this;
   }
 
-  public writeBytes(bytes: string, byteLen: number = 32): BytesBuffer {
+  public writeBytes(bytes: string): BytesBuffer {
+    this.tmpBuf += StringExt.toEvenHexString(StringExt.hexPrefixRemove(bytes));
+    return this;
+  }
+
+  public writeFixedBytes(bytes: string, byteLen: number): BytesBuffer {
     this.tmpBuf += StringExt.bytesPadding(
       StringExt.hexPrefixRemove(bytes),
       byteLen
